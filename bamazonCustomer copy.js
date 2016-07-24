@@ -16,18 +16,14 @@ var connection = mysql.createConnection({
 connection.connect(function(err){
   if (err) throw err;
   console.log("connected " + connection.threadId);
-  makeTable();
 });
 
 //Query that displays everything(*) from Products table
-var makeTable = function(){
-   connection.query('SELECT * FROM Products', function(err, res){
-      if (err) throw err;
-      console.table(res); 
-      promptCustomer();
-
-  });
-}
+connection.query('SELECT * FROM Products', function(err, res){
+  if (err) throw err;
+  console.table(res); 
+  promptCustomer();
+});
 
 var promptCustomer = function() {
   inquirer.prompt([
@@ -47,20 +43,19 @@ var promptCustomer = function() {
           if (err) throw err;
           if (res.length == 0) {
             console.log("ItemID not found. Please try again.");
-            makeTable();
+            promptCustomer();
           }else{
 
           console.log("\nThe product you've selected is : \n" );
           console.table(res);
-          console.log("The quantity you've selected is: " + prompt_result.totalQuantity);
+          console.log("The quantity you've selected is " + prompt_result.totalQuantity);
           //console.log(res[0].stockQuantity);
           //console.log(prompt_result.totalQuantity);
           if(res[0].stockQuantity >= parseInt(prompt_result.totalQuantity)){
-            console.log("Your order has been submitted. \n");
-            makeTable(); //Cause ordering prompt to restart
+            console.log("Your order has been submitted.");
           }else{
-            console.log("Insufficient quantity in stock.\n");
-            makeTable(); //Cause ordering prompt to restart
+            console.log("Insufficient quantity in stock.");
+            //promptCustomer(); Cause ordering prompt to restart
           }
           }
       })
