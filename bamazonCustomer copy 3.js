@@ -29,17 +29,11 @@ var makeTable = function(){
   });
 }
 
-//Updates the quantities in the database and performs the total price calculation
 var quantityUpdate = function (res, totQty){
   var x = res[0].price;
   var y = parseInt(totQty);
   var z = x * y;
-  
   console.log("Your total price for this item is: $" + z + "\n");
-
-  connection.query("UPDATE Products SET ? WHERE ?",[{
-    stockQuantity: 5
-  }], function(err, res) {});
 }
 
 var promptCustomer = function() {
@@ -73,7 +67,7 @@ var promptCustomer = function() {
           //and updates the database
           if(res[0].stockQuantity >= parseInt(prompt_result.totalQuantity)){
             console.log("Your order has been submitted. \n");
-            quantityUpdate(res, prompt_result.totalQuantity);
+            quantityUpdate(res, prompt_result.totalQuantity);//Updates the quantities in the database
             makeTable(); //Cause ordering prompt to restart
 
           }else{
@@ -95,4 +89,4 @@ var promptCustomer = function() {
 
 
   })//End of .then
-}//End of function "prompcustomer"
+}//End of function "start"
