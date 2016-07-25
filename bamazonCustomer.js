@@ -34,12 +34,17 @@ var quantityUpdate = function (res, totQty){
   var x = res[0].price;
   var y = parseInt(totQty);
   var z = x * y;
+  var itemNum = res[0].itemID;
   
   console.log("Your total price for this item is: $" + z + "\n");
 
-  connection.query("UPDATE Products SET ? WHERE ?",[{
-    stockQuantity: 5
-  }], function(err, res) {});
+  //connection.query("UPDATE products set stockQuantity=6 WHERE itemID=106",
+  connection.query("UPDATE products SET stockQuantity='"+(res[0].stockQuantity - totQty)+"' WHERE itemID='"+itemNum+"'",
+    function(err, res2) {
+      if(err) throw err;
+      //console.log('update appears ok' + (typeof (res[0].itemID)));
+      //console.log('update appears ok' + (typeof (totQty)));
+  })
 }
 
 var promptCustomer = function() {
@@ -85,14 +90,5 @@ var promptCustomer = function() {
           }
           }
       })
-
-
-      
-
-
-      // var correct = false;
-
-
-
   })//End of .then
 }//End of function "prompcustomer"
